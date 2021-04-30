@@ -5,6 +5,7 @@ class Server {
   private Socket socket;
   private ServerSocket server;
   private DataInputStream in;
+  private DataOutputStream out;
 
   public Server(int port) throws Exception {
     server = new ServerSocket(port);
@@ -19,12 +20,22 @@ class Server {
       System.out.println("--IP:    " + socket.getInetAddress());
       System.out.println("--Port:  " + socket.getPort());
 
+      in = new DataInputStream(socket.getInputStream());
+      out = new DataOutputStream(socket.getOutputStream());
+
+      sendData("test");
+
+      sendData("Over");
       socket.close();
     }
   }
-  
+
+  public void sendData(String data) throws Exception {
+    out.writeUTF(data);
+  }
+
   public static void main(String[] args) throws Exception {
-    Server server = new Server(5000);
+    Server server = new Server(8006);
     server.run();
   }
 }
